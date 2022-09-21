@@ -12,21 +12,18 @@ function RegisterScreen(props) {
   const [error, setError] = useState(false);
 
 
-  const redirect = props.location.search ? props.location.search.split("=")[1] : '/';
-  useEffect(() => {
-    if (userInfo) {
-      props.history.push(redirect);
-    }
-    return () => {
-      //
-    };
-  }, [userInfo]);
-
-  const submitHandler = (e) => {
+ const submitHandler = (e) => {
     e.preventDefault();
-    axios.post("/api/users/register", { name, email, password }).then(res => {
-      console.log(res);
-    })
+    setError('')
+    if(password === rePassword)
+    {
+      axios.post("/api/users/register", { name, email, password }).then(res => {
+        console.log(res);
+        props.history.push('/signin');
+      })
+    }else{
+      setError('password is not equal with repeat password')
+    }
 
   }
   return <div className="form">
