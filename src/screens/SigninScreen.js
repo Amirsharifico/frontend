@@ -23,10 +23,16 @@ function SigninScreen(props) {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    axios.post("/api/users/login", {  email, password }).then(res => {
+        axios.post("/api/users/signin", {  email, password }).then(res => {
       console.log(res);
+      localStorage.setItem('userInfo',JSON.stringify(res.data))
+      localStorage.setItem('token',res.data.token)
+      if(res.data.isAdmin) {
+        props.history.push('/add-product');
+      }else{
+        props.history.push('/');
+      }
     })
-
   }
   return <div className="form">
     <form onSubmit={submitHandler} >
@@ -57,7 +63,7 @@ function SigninScreen(props) {
           New to BOOBAADY?
         </li>
         <li>
-          <Link to={redirect === "/" ? "register" : "register?redirect=" + redirect} className="button secondary text-center" >Create your  account</Link>
+          <Link to={redirect === "/" ? "register" : "register?redirect=" + redirect} className="button secondary text-center" >Create your boobaady account</Link>
         </li>
       </ul>
     </form>
