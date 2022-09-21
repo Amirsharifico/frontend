@@ -29,6 +29,8 @@ function RegisterScreen(props) {
     })
 
   }
+
+  
   return <div className="form">
     <form onSubmit={submitHandler} >
       <ul className="form-container">
