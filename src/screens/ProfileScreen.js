@@ -19,7 +19,9 @@ function ProfileScreen(props) {
 
   const handleLogout = () => {
     localStorage.removeItem('token')
-    localStorage.removeItem('userInfo')
+    localStorage.removeItem('userInfo') 
+    localStorage.removeItem('cartItems')
+    props.setCartItems([])
     props.history.push('/')
   }
 
@@ -32,6 +34,8 @@ function ProfileScreen(props) {
       }
     }).then(res => {
       console.log(res)
+      localStorage.setItem('userInfo',JSON.stringify(res.data))
+      alert('your information updated')
     })
   }
 
@@ -42,10 +46,7 @@ function ProfileScreen(props) {
       setPassword(userInfo.password);
     }
     listMyOrders()
-    return () => {
-
-    };
-  }, [userInfo])
+  }, [])
 
   const listMyOrders = () => {
       axios.get("/api/orders/mine", {
@@ -76,14 +77,14 @@ function ProfileScreen(props) {
               <label htmlFor="name">
                 Name
           </label>
-              <input value={name} type="name" name="name" id="name" onChange={(e) => setName(e.target.value)}>
+          <input defaultValue={name} type="name" name="name" id="name" onChange={(e) => setName(e.target.value)}>
               </input>
             </li>
             <li>
               <label htmlFor="email">
                 Email
           </label>
-              <input value={email} type="email" name="email" id="email" onChange={(e) => setEmail(e.target.value)}>
+          <input defaultValue={email} type="email" name="email" id="email" onChange={(e) => setEmail(e.target.value)}>
               </input>
             </li>
             <li>

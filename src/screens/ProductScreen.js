@@ -67,6 +67,20 @@ function ProductScreen(props) {
   }
 
 
+  const checkStock = (product) => {
+    let cartItems = JSON.parse(localStorage.getItem('cartItems')) || []
+    let item = cartItems.find(item => {
+      if(item.product === product._id) return item
+    })
+
+    let count = product.countInStock - ( item ? item.qty : 0)
+     setCountInStock(count)
+ }
+
+ const checkout = () => {
+    props.history.push('/cart')
+ }
+
 
   return (
     <div>
@@ -114,28 +128,36 @@ function ProductScreen(props) {
                 </li>
                 <li>
                   Qty:{' '}
+                  {countInStock > 0 ?
                   <select
                     value={qty}
                     onChange={(e) => {
                       setQty(e.target.value);
                     }}
                   >
-                    {[...Array(product.countInStock).keys()].map((x) => (
+                    {[...Array(countInStock).keys()].map((x) => (
                       <option key={x + 1} value={x + 1}>
                         {x + 1}
                       </option>
                     ))}
-                  </select>
+                    </select> : 0
+                  }
                 </li>
                 <li>
-                  {product.countInStock > 0 && (
-                    <button
+                <button
                       onClick={handleAddToCart}
                       className="button primary"
+                      disabled={countInStock <= 0 && true}
                     >
                       Add to Cart
+                      </button>
+                    <button
+                      style={{marginTop:16}}
+                      onClick={checkout}
+                      className="button primary"
+                    >
+                       checkout
                     </button>
-                  )}
                 </li>
               </ul>
             </div>

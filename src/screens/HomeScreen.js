@@ -9,26 +9,16 @@ function HomeScreen(props) {
   const [products,setProducts] = useState([])
   const [loading,setLoading] = useState(false)
   const [error,setError] = useState('')
-  const category = props.match.params.id ? props.match.params.id : '';
+  const category = props.match.params.type ? props.match.params.type : '';
 
   useEffect(() => {
-    listProducts()
-    return () => {
-      //
-    };
-  }, []);
-
+    listProducts();
+},[category,sortOrder]);
 
   const listProducts = () => {
     setLoading(true)
     axios.get(
-      '/api/products'
-      // '?category=' +
-      // category +
-      // '&searchKeyword=' +
-      // '' +
-      // '&sortOrder=' +
-      // sortOrder
+      `/api/products?category=${category}&searchKeyword=${searchKeyword}&sortOrder=${sortOrder}`
     ).then(res => {
       console.log(res)
       setLoading(false)
@@ -42,12 +32,9 @@ function HomeScreen(props) {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    listProducts()
+ };
 
-  };
-  const sortHandler = (e) => {
-    setSortOrder(e.target.value);
-
-  };
 
   return (
     <>
@@ -60,18 +47,19 @@ function HomeScreen(props) {
               name="searchKeyword"
               onChange={(e) => setSearchKeyword(e.target.value)}
             />
-            <button type="submit">Search</button>
+            <button className="search-btn" type="submit">Search</button>
           </form>
         </li>
         <li>
           Sort By{' '}
-          <select name="sortOrder" onChange={sortHandler}>
+          <select name="sortOrder" onChange={e => setSortOrder(e.target.value)}>
             <option value="">Newest</option>
             <option value="lowest">Lowest</option>
             <option value="highest">Highest</option>
           </select>
         </li>
       </ul>
+      <img width="100%"  src="./nike.jpg" alt=""/>
       {loading ? (
         <div>Loading...</div>
       ) : error ? (
@@ -84,7 +72,7 @@ function HomeScreen(props) {
                 <Link to={'/product/' + product._id}>
                   <img
                     className="product-image"
-                    src={process.env.PUBLIC_URL +  product.image.replace('/frontend\\public\\','')}
+                    src={process.env.PUBLIC_URL +  product.image.replace('/frontend\\public','')}
                     alt="product"
                   />
                 </Link>
