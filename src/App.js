@@ -1,53 +1,53 @@
-import React, { useState } from 'react';
-import { BrowserRouter, Route, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter, Route, Link, withRouter } from 'react-router-dom';
 import './App.css';
+
+// admin component
+import ProductsScreen from './admin-screen/ProductsScreen';
+import OrdersScreen from './admin-screen/OrdersScreen';
+//user component
 import HomeScreen from './screens/HomeScreen';
 import SigninScreen from './screens/SigninScreen';
 import RegisterScreen from './screens/RegisterScreen';
-import ProductsScreen from './screens/ProductsScreen';
-//hello AMIR
-
+import ProductScreen from './screens/ProductScreen';
+import CartScreen from './screens/CartScreen';
+import ProfileScreen from './screens/ProfileScreen';
+import Header from './components/Header';
+import ShippingScreen from './screens/ShippingScreen';
+import PaymentScreen from './screens/PaymentScreen';
+import PlaceOrderScreen from './screens/PlaceOrderScreen';
+import OrderScreen from './screens/OrderScreen';
+import Sidebar from './components/Sidebar';
+import CategoriesScreen from './admin-screen/CategoryScreen';
 function App() {
-  const [ userInfo  , setUserInfo] = useState(false);
+  const [open,setOpen] = useState(false)
+  const [cartItems,setCartItems] = useState([])
   return (
-    <BrowserRouter>
       <div className="grid-container">
-        <header className="header">
-          <div className="brand">
-            <button>&#9776;</button>
-            <Link to="/">boobaady</Link>
-          </div>
-          <div className="header-links">
-            {userInfo ? (
-              <Link to="/profile">{userInfo.name}</Link>
-            ) : (
-              <Link to="/signin">Sign In</Link>
-            )}
-            {userInfo && userInfo.isAdmin && (
-              <div className="dropdown">
-                <a href="#">Admin</a>
-                <ul className="dropdown-content">
-                  <li>
-                    {/*<Link to="/orders">Orders</Link>*/}
-                    <Link to="/products">Products</Link>
-                  </li>
-                </ul>
-              </div>
-            )}
-          </div>
-        </header>
-        <main className="main">
+          <Header cartItems={cartItems} setOpen={setOpen}/>
+       <Sidebar open={open} setOpen={setOpen}/>
+       <main className="main">
           <div className="content">
-            <Route path="/signin" component={SigninScreen} />
-            <Route path="/register" component={RegisterScreen} />
-            <Route path="/add-product" component={ProductsScreen} />
-            <Route path="/" exact={true} component={HomeScreen} />
+            <Route path="/signin" component={SigninScreen}/>
+            <Route path="/register" component={RegisterScreen}/>
+            <Route path="/product/:id" component={ProductScreen} />
+            <Route path="/placeorder" component={PlaceOrderScreen} />
+            <Route path="/cart/:id?"  render={(props) => <CartScreen cartItems={cartItems} setCartItems={setCartItems} {...props} />}  />
+            <Route path="/profile"   render={(props) => <ProfileScreen cartItems={cartItems} setCartItems={setCartItems} {...props} />}  />
+            <Route path="/shipping" component={ShippingScreen} />
+            <Route path="/payment" component={PaymentScreen} />
+            <Route path="/order/:id" component={OrderScreen} />
+            <Route path="/category/:type" component={HomeScreen} />
+            <Route path="/" exact={true} component={HomeScreen}/>
+             {/*admin route*/}
+            <Route path="/orders" component={OrdersScreen} />
+            <Route path="/add-product" component={ProductsScreen}/>
+            <Route path="/add-category" component={CategoriesScreen}/>
           </div>
         </main>
         <footer className="footer">All right reserved.</footer>
       </div>
-    </BrowserRouter>
   );
 }
 
-export default App;
+export default withRouter(App);
