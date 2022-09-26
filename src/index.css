@@ -54,7 +54,7 @@ button {
 }
 .footer {
   grid-area: footer;
-  background-color: #203040;
+  background-color:black;
   color: #ffffff;
   display: flex;
   justify-content: center;

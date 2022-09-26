@@ -30,7 +30,7 @@ const Header = (props) => {
     <header className="header">
       <div className="brand">
         <button onClick={() => props.setOpen(true)}>&#9776;</button>
-        <Link to="/">boobaady</Link>
+        <Link to="/">BooBaady</Link>
       </div>
       <div className="header-links">
         <Link className="cart-count" to="/cart">
@@ -45,10 +45,11 @@ const Header = (props) => {
         {userInfo && userInfo.isAdmin && (
           <div className="dropdown">
             <a href="#">Admin</a>
-            <ul className="dropdown-content">
+            <ul className="dropdown-content admin-dropdown">
               <li>
                 <Link to="/orders">Orders</Link>
                 <Link to="/add-product">Products</Link>
+                <Link to="/add-category">Category</Link>
               </li>
             </ul>
           </div>

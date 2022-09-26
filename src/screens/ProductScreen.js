@@ -14,7 +14,7 @@ function ProductScreen(props) {
   const [loading, setLoading] = useState('');
   const [error, setError] = useState('');
   const [product , setProduct] = useState({reviews:[],image:''});
-
+  const [countInStock , setCountInStock] = useState(0);
   //get userinfo
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
@@ -61,6 +61,7 @@ function ProductScreen(props) {
     axios.get(`/api/products/${props.match.params.id}`).then(res => {
       console.log(res)
       setProduct(res.data)
+      checkStock(res.data)
     }).catch(er => {
       console.log(er)
     })
@@ -85,7 +86,7 @@ function ProductScreen(props) {
   return (
     <div>
       <div className="back-to-result">
-        <Link to="/">Back to result</Link>
+        {/* <Link to="/">Back to result</Link> */}
       </div>
       {loading ? (
         <div>Loading...</div>

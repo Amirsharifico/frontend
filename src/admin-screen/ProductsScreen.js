@@ -13,6 +13,7 @@ function ProductsScreen(props) {
   const [description, setDescription] = useState('');
   const [uploading, setUploading] = useState(false);
   const [products, setProducts] = useState([]);
+  const [categories,setCategories] = useState([])
 
 
   const listProducts = () => {
@@ -29,9 +30,16 @@ function ProductsScreen(props) {
       setProducts(res.data)
     })
   }
+  const getCategories = () => {
+    axios.get('/api/category').then(res => {
+      console.log(res)
+      setCategories(res.data)
+    })
+  }
 
   useEffect(()=>{
     listProducts()
+    getCategories()
   },[])
 
   const openModal = (product) => {
@@ -58,13 +66,14 @@ function ProductsScreen(props) {
   };
 
   const createProduct = () => {
+    let _category = category ? category : categories[0].name
     axios.post('/api/products/',{
       _id: id,
       name,
       price,
       image,
       brand,
-      category,
+      category:_category,
       countInStock,
       description,
     },{
@@ -211,13 +220,11 @@ function ProductsScreen(props) {
               </li>
               <li>
                 <label htmlFor="name">Category</label>
-                <input
-                  type="text"
-                  name="category"
-                  value={category}
-                  id="category"
-                  onChange={(e) => setCategory(e.target.value)}
-                ></input>
+                <select className="categories-input" name="category" onChange={(e) => setCategory(e.target.value)}>
+                  {categories.map(category => (
+                    <option key={category._id} value={category.name}>{category.name}</option>
+                  ))}
+                </select>
               </li>
               <li>
                 <label htmlFor="description">Description</label>
