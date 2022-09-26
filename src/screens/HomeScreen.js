@@ -30,35 +30,43 @@ function HomeScreen(props) {
     })
   }
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-    listProducts()
- };
 
 
   return (
     <>
-      {category && <h2>{category}</h2>}
-
-      <ul className="filter">
-        <li>
-          <form onSubmit={submitHandler}>
-            <input
-              name="searchKeyword"
-              onChange={(e) => setSearchKeyword(e.target.value)}
-            />
-            <button className="search-btn" type="submit">Search</button>
-          </form>
-        </li>
-        <li>
-          Sort By{' '}
-          <select name="sortOrder" onChange={e => setSortOrder(e.target.value)}>
-            <option value="">Newest</option>
-            <option value="lowest">Lowest</option>
-            <option value="highest">Highest</option>
-          </select>
-        </li>
-      </ul>
+           <div className="filter">
+        <svg className="pre-logo-svg" height="60px" width="60px" fill="#111" viewBox="0 0 69 32">
+          <path
+            d="M68.56 4L18.4 25.36Q12.16 28 7.92 28q-4.8 0-6.96-3.36-1.36-2.16-.8-5.48t2.96-7.08q2-3.04 6.56-8-1.6 2.56-2.24 5.28-1.2 5.12 2.16 7.52Q11.2 18 14 18q2.24 0 5.04-.72z"></path>
+        </svg>
+        <div className="search-sort-wrapper">
+          <div>
+            <form>
+              <div className="search-wrapper">
+                <input
+                  name="searchKeyword"
+                  placeholder="Search"
+                  onChange={(e) => setSearchKeyword(e.target.value)}
+                />
+                <svg onClick={listProducts}  className="pre-search-input-icon" fill="#111" height="30px" width="30px"
+                     viewBox="0 0 24 24">
+                  <path
+                    d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.39zM11 18a7 7 0 1 1 7-7 7 7 0 0 1-7 7z"></path>
+                </svg>
+              </div>
+            </form>
+          </div>
+          <div>
+            Sort By{' '}
+            <select name="sortOrder" onChange={e => setSortOrder(e.target.value)}>
+              <option value="">Newest</option>
+              <option value="lowest">Lowest</option>
+              <option value="highest">Highest</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      {category && <h2 style={{marginLeft:16}}>{category}</h2>}
       <img width="100%"  src="./nike.jpg" alt=""/>
       {loading ? (
         <div>Loading...</div>
