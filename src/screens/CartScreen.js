@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 function CartScreen(props) {
+    let {setCartItems,cartItems} = props;
 
-  const [cartItems,setCartItems] = useState([])
-  const [cart,setCart] = useState([])
+ 
 
 
 
@@ -23,6 +23,9 @@ function CartScreen(props) {
   useEffect(() => {
     if (productId) {
         getProduct()
+      }else{
+        let cartItems = JSON.parse(localStorage.getItem('cartItems')) || []
+        setCartItems(cartItems)
     }
   }, []);
 
@@ -32,7 +35,7 @@ function CartScreen(props) {
 
   const getProduct = () => {
     axios.get(`/api/products/${props.match.params.id}`).then(res => {
-      console.log(res)
+    
       let qty = props.location.search ? Number(props.location.search.split("=")[1]) : 1;
       let find = false
       let data = res.data
@@ -40,21 +43,20 @@ function CartScreen(props) {
 
 
       if(cartItems.length > 0){
-        console.log(cartItems)
+   
         cartItems = cartItems.map(item => {
            if(item.product === data._id){
              find = true
-             if(item.countInStock > item.qty)
+            
                qty = item.qty + qty;
-             else {
-               qty = item.qty;
-               // handle error
-             }
+           
+             
              return {...item,qty}
            }else{
-             return { ...item }
+             return item
            }
          })
+         console.log('hesi',cartItems)
       }
 
       let cart = {
@@ -79,7 +81,18 @@ function CartScreen(props) {
     })
   }
 
-
+  const changeQty = (qty,id) => {
+    let cartItems = JSON.parse(localStorage.getItem('cartItems')) || []
+    let newCartItems = cartItems.map(item => {
+     if(item.product === id){
+       return {...item,qty:parseInt(qty)}
+     }else{
+       return item
+     }
+   })
+   localStorage.setItem('cartItems',JSON.stringify(newCartItems))
+   setCartItems(newCartItems)
+ }
   return <div className="cart">
     <div className="cart-list">
       <ul className="cart-list-container">
@@ -113,7 +126,7 @@ function CartScreen(props) {
                   </div>
                   <div>
                     Qty:
-                  <select value={item.qty} onChange={(e) => {}}>
+                    <select value={item.qty} onChange={(e) => changeQty(e.target.value,item.product)}>
                       {[...Array(item.countInStock).keys()].map(x =>
                         <option key={x + 1} value={x + 1}>{x + 1}</option>
                       )}
